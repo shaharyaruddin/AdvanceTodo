@@ -9,7 +9,16 @@ function TodoApp() {
     setInput(inputValue.trim(""));
   };
 
-  const handleEdit = (index) => {};
+  const handleEdit = (index) => {
+    // for Example
+    // let arr =[1,2,3,4,5]
+    // console.log(arr[0])
+
+const storedData =[...data]
+const updatedData = storedData[index]
+setInput(updatedData)
+
+  };
 
   const deleteAll = () => {
     setData([]);
@@ -64,7 +73,7 @@ function TodoApp() {
           return (
             <>
               <div key={index} className="flex justify-center font-serif">
-                <div className="flex justify-between text-xl font-bold  border-4 p-4 bg-black text-white border-red-600 mt-5 w-[30%]">
+                <div className="flex justify-between text-xl font-bold  border-4 p-4  text-black border-red-600 mt-5 w-[30%]">
                   {item}
                   <div className="">
                     <button
