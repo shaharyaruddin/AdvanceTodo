@@ -3,21 +3,11 @@ import React, { useState } from "react";
 function TodoApp() {
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
+  const [show, setShow] = useState(false);
 
   const handleInput = (e) => {
     const inputValue = e.target.value;
     setInput(inputValue.trim(""));
-  };
-
-  const handleEdit = (index) => {
-    // for Example
-    // let arr =[1,2,3,4,5]
-    // console.log(arr[0])
-
-const storedData =[...data]
-const updatedData = storedData[index]
-setInput(updatedData)
-
   };
 
   const deleteAll = () => {
@@ -37,9 +27,29 @@ setInput(updatedData)
     }
   };
 
+  const handleEdit = (index) => {
+    // for Example
+    let arr =[1,2,3,4,5]
+    console.log(arr[0])  
+
+
+    arr[0] = 5
+
+    // setShow(true);
+
+    setInput(data[index]);
+  };
+
+  const handleUpdate = (index) => {
+    const storedData = [...data];
+    storedData[index]=input
+    setData(storedData);
+
+  };
+
   return (
     <>
-      <div className=" py-10">
+      <div className="py-10">
         <div className="flex justify-center items-center">
           <input
             type="text"
@@ -48,12 +58,23 @@ setInput(updatedData)
             value={input}
             onChange={handleInput}
           />
+
           <button
             className="mx-10 p-3 rounded-md bg-black text-white"
             onClick={handleAdd}
           >
-            Add{" "}
+            Add
           </button>
+
+          {/*          
+          {show && (
+            <button
+              className="p-3 rounded-md bg-black text-white"
+              onClick={handleUpdate}
+            >
+              Update
+            </button>
+          )} */}
         </div>
       </div>
       <div className="flex justify-center">
@@ -66,9 +87,9 @@ setInput(updatedData)
       </div>
       {data
         .sort()
-        .filter((item) => {
-          return item.toLowerCase().includes(input.toLowerCase());
-        })
+        // .filter((item) => {
+        //   return item.toLowerCase().includes(input.toLowerCase());
+        // })
         .map((item, index) => {
           return (
             <>
@@ -88,6 +109,13 @@ setInput(updatedData)
                       onClick={() => handleEdit(index)}
                     >
                       Edit
+                    </button>
+
+                    <button
+                      className="bg-black text-white font-bold border text-base p-1 rounded-md"
+                      onClick={() => handleUpdate(index)}
+                    >
+                      Update
                     </button>
                   </div>
                 </div>
