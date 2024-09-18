@@ -4,6 +4,7 @@ function TodoApp() {
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
 
   const handleInput = (e) => {
     const inputValue = e.target.value;
@@ -23,28 +24,31 @@ function TodoApp() {
       setData([...data]);
     } else {
       setData([...data, input]);
+      data.filter((item) => {
+          return item.toLowerCase().includes(input.toLowerCase());
+        })
       setInput("");
     }
   };
 
   const handleEdit = (index) => {
     // for Example
-    let arr =[1,2,3,4,5]
-    console.log(arr[0])  
+    // let arr =[1,2,3,4,5]
+    // console.log(arr[0])
 
-
-    arr[0] = 5
-
-    // setShow(true);
-
+    setShow(true);
     setInput(data[index]);
+    setEditIndex(index);
   };
 
-  const handleUpdate = (index) => {
-    const storedData = [...data];
-    storedData[index]=input
-    setData(storedData);
-
+  const handleUpdate = () => {
+    if (editIndex !== null) {
+      const updatedData = [...data];
+      updatedData[editIndex] = input;
+      setData(updatedData);
+      setShow(false)
+      setInput('')
+    }
   };
 
   return (
@@ -58,23 +62,21 @@ function TodoApp() {
             value={input}
             onChange={handleInput}
           />
-
-          <button
-            className="mx-10 p-3 rounded-md bg-black text-white"
-            onClick={handleAdd}
-          >
-            Add
-          </button>
-
-          {/*          
-          {show && (
+          {show ? (
             <button
-              className="p-3 rounded-md bg-black text-white"
+              className="mx-10 p-3 rounded-md bg-black text-white"
               onClick={handleUpdate}
             >
               Update
             </button>
-          )} */}
+          ) : (
+            <button
+              className="mx-10 p-3 rounded-md bg-black text-white"
+              onClick={handleAdd}
+            >
+              Add
+            </button>
+          )}
         </div>
       </div>
       <div className="flex justify-center">
@@ -87,9 +89,7 @@ function TodoApp() {
       </div>
       {data
         .sort()
-        // .filter((item) => {
-        //   return item.toLowerCase().includes(input.toLowerCase());
-        // })
+        
         .map((item, index) => {
           return (
             <>
@@ -109,13 +109,6 @@ function TodoApp() {
                       onClick={() => handleEdit(index)}
                     >
                       Edit
-                    </button>
-
-                    <button
-                      className="bg-black text-white font-bold border text-base p-1 rounded-md"
-                      onClick={() => handleUpdate(index)}
-                    >
-                      Update
                     </button>
                   </div>
                 </div>
