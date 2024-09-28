@@ -1,10 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Modal from "../components/Modal";
 
 function TodoApp() {
+  const getLocalItems = () => {
+    const getData = localStorage.getItem("items");
+
+    if (getData) {
+      return JSON.parse(getData);
+    } else {
+      return [];
+    }
+  };
+
   const [input, setInput] = useState("");
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(getLocalItems());
   const [show, setShow] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+
+  useEffect(() => {
+     localStorage.setItem("items", JSON.stringify(data));
+  }, [data]);
 
   const handleInput = (e) => {
     const inputValue = e.target.value;
@@ -25,8 +40,8 @@ function TodoApp() {
     } else {
       setData([...data, input]);
       data.filter((item) => {
-          return item.toLowerCase().includes(input.toLowerCase());
-        })
+        return item.toLowerCase().includes(input.toLowerCase());
+      });
       setInput("");
     }
   };
@@ -46,8 +61,8 @@ function TodoApp() {
       const updatedData = [...data];
       updatedData[editIndex] = input;
       setData(updatedData);
-      setShow(false)
-      setInput('')
+      setShow(false);
+      setInput("");
     }
   };
 
@@ -58,7 +73,7 @@ function TodoApp() {
           <input
             type="text"
             placeholder="Add Something..."
-            className="border-4 border-black p-4"
+            className="border-4 rounded-md border-black p-4"
             value={input}
             onChange={handleInput}
           />
@@ -87,14 +102,16 @@ function TodoApp() {
           Delete All
         </button>
       </div>
+{/* <Modal/> */}
+
       {data
         .sort()
-        
+
         .map((item, index) => {
           return (
             <>
               <div key={index} className="flex justify-center font-serif">
-                <div className="flex justify-between text-xl font-bold  border-4 p-4  text-black border-red-600 mt-5 w-[30%]">
+                <div className="flex justify-between text-xl font-bold  border-4 p-4   text-black border-red-600 mt-5 w-full md:w-[30%] mx-4 md:mx-0 rounded-md">
                   {item}
                   <div className="">
                     <button
